@@ -11,16 +11,29 @@ public class Stop {
     private double passengersGeneratedPerTick;
     private double passengerGenerationCounter = 0;
 
+    private final double location;
+    private final boolean isTerminal;
+
     private Route route;
 
-    public Stop(Route route, int id, double passengersGeneratedPerTick){
+    public Stop(Route route, int id, double passengersGeneratedPerTick, double location, boolean isTerminal){
         this.id = id;
         this.passengersGeneratedPerTick = passengersGeneratedPerTick;
         this.route = route;
+        this.location = location;
+        this.isTerminal = isTerminal;
     }
 
     public int getId(){
         return id;
+    }
+
+    public boolean isTerminal(){
+        return isTerminal;
+    }
+
+    public double getLocation(){
+        return location;
     }
 
     /**
@@ -32,12 +45,20 @@ public class Stop {
     }
 
     /**
-     *  
-     * @return A List of Passengers to board onto the Bus at this Stop; calling this method also clears this Stop's list of Passengers
+     * 
+     * @param nextServedStopID The ID of the next Stop the Bus is serving 
+     * 
+     * @return A List of Passengers to board onto the Bus at this Stop; calling this method also removes those Passengers from the list
      */
-    public ArrayList<Passenger> getPassengersForBoarding(){
-        ArrayList<Passenger> toBoard = new ArrayList<>(passengers);
-        passengers.clear();
+    public ArrayList<Passenger> getPassengersForBoarding(int nextServedStopID){
+        ArrayList<Passenger> toBoard = new ArrayList<>();
+        passengers.removeIf(p -> {
+            if(p.getDestinationStopId() >= nextServedStopID){
+                toBoard.add(p);
+                return true;
+            }
+            return false;
+        });
         return toBoard;
     }
 

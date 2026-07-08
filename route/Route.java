@@ -1,19 +1,103 @@
 package route;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.Random;
 
+import route.control.interfaces.ExpressController;
+import route.control.interfaces.HoldController;
+import route.control.interfaces.Terminal;
 import route.entity.Bus;
 import route.entity.Stop;
+import telemetry.PassengerCollector;
 
 public class Route {
     private ArrayList<Stop> stops;
     private ArrayList<Bus> buses = new ArrayList<>();
 
-    public Route(ArrayList<Stop> stops){
+    private final long seed;
+    private Random routeRNG;
+
+    private ExpressController expressController;
+    private HoldController holdController;
+    private PassengerCollector passengerCollector;
+    private Terminal terminal;
+
+    public Route(ArrayList<Stop> stops, long seed, ExpressController expressController, HoldController holdController, PassengerCollector passengerCollector, Terminal terminal){
         this.stops = stops;
+        this.seed = seed;
+        this.routeRNG = new Random(seed);
+        this.expressController = expressController;
+        this.passengerCollector = passengerCollector;
+        this.terminal = terminal;
+        this.holdController = holdController;
     }
 
+    public long getSeed(){
+        return seed;
+    }
+
+    /**
+     * 
+     * @param id 
+     * @return ID of a random Stop after the Stop with the passed in ID
+     */
     public int getRandomStopAfterId(int id){
-        return 0;
+        ArrayList<Stop> possibleStops = new ArrayList<>();
+        for(Stop s : stops){
+            if(s.getId() > id){
+                possibleStops.add(s);
+            }
+        }
+        return possibleStops.get(routeRNG.nextInt(possibleStops.size())).getId();
+    }
+
+    public Optional<Stop> getStopFromId(int id){
+        for(Stop s : stops){
+            if(s.getId() == id){
+                return Optional.of(s);
+            }
+        }
+        return Optional.empty();
+    }
+
+    public void tick(){
+        // Stops just need to be ticked, they do not need anything fancy
+        for(Stop s : stops){ 
+            s.tick();
+        }
+
+        // buses require all of the logic to be done for them
+        buses.removeIf(bus -> {
+            Optional<Stop> nextStop = getStopFromId(bus.getNextStopId()); 
+            if(nextStop.isPresent()){ // check if a Stop with the Bus's nextStopID exists, and if it doesn't stop the program
+                if(bus.getLocation() >= nextStop.get().getLocation()){ // if the Bus is at the next Stop
+                    Stop currentStop = nextStop.get(); // we are now at that Stop
+                    if(!currentStop.isTerminal()){ // if it is not a terminal
+                        bus.setNextStopId(expressController.getNextStopIdForBus(bus, this)); // allow the expresscontroller to figure out what the next Stop is
+                        bus.boardPassengers(currentStop.getPassengersForBoarding(bus.getNextStopId())); // board Passengers that are going to or after the next served Stop, this adds dwell time automatically
+                        passengerCollector.collect(bus.deboardPassengersWithDestinationId(currentStop.getId())); // collect deboarding passengers
+                        bus.addDwellTicks(holdController.getExtraDwellTimeTicks(bus, this)); // allow the holdcontroller to add extra time
+                    }
+                    else{
+                        passengerCollector.collect(bus.deboardPassengersWithDestinationId(currentStop.getId())); // collect deboarding passengers
+                        terminal.terminate(bus); // hand off the bus to the terminal
+                        return true; // remove it from active buses
+                    }
+                }
+            }
+            else{
+                System.err.println("A Bus had a next Stop ID that did not correspond to a real stop. Quitting..."); // shouldn't be possible, but we want to catch it if it happens
+                assert false;
+            }
+            bus.tick();
+            return false;
+        });
+
+        // check if the terminal has a bus for us
+        Optional<Bus> toDispatch = terminal.getBusForDispatchIfExists();
+        if(toDispatch.isPresent()){
+            buses.add(toDispatch.get());
+        }
     }
 }

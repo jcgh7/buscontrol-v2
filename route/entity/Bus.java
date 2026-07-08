@@ -3,7 +3,7 @@ package route.entity;
 import java.util.ArrayList;
 
 public class Bus {
-    private final int run;
+    private int run;
 
     private ArrayList<Passenger> passengers = new ArrayList<>();
     private final int ticksPerPassengerBoardTime = 10;
@@ -20,8 +20,17 @@ public class Bus {
         this.distancePerTick = distancePerTick;
     }
 
+    public void reset(){
+        location = 0;
+        dwellTicks = 0;
+    }
+
     public int getRun() {
         return run;
+    }
+
+    public void setRun(int run){
+        this.run = run;
     }
 
     public void setDistancePerTick(double dpt){
