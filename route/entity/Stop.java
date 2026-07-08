@@ -2,6 +2,8 @@ package route.entity;
 
 import java.util.ArrayList;
 
+import route.Route;
+
 public class Stop {
     private final int id;
 
@@ -9,9 +11,12 @@ public class Stop {
     private double passengersGeneratedPerTick;
     private double passengerGenerationCounter = 0;
 
-    public Stop(int id, double passengersGeneratedPerTick){
+    private Route route;
+
+    public Stop(Route route, int id, double passengersGeneratedPerTick){
         this.id = id;
         this.passengersGeneratedPerTick = passengersGeneratedPerTick;
+        this.route = route;
     }
 
     public int getId(){
@@ -36,18 +41,14 @@ public class Stop {
         return toBoard;
     }
 
-    /**
-     * 
-     * @param destinationStopId stop ID from (this stop, terminal]
-     */
-    public void tick(int destinationStopId){
+    public void tick(){
+        for(Passenger p : passengers){
+            p.tick();
+        }
         passengerGenerationCounter+=passengersGeneratedPerTick;
         if(passengerGenerationCounter>=1){
             passengerGenerationCounter--;
-            addPassenger(new Passenger(destinationStopId));
-        }
-        for(Passenger p : passengers){
-            p.tick();
+            addPassenger(new Passenger(route.getRandomStopAfterId(id)));
         }
     }
 }
