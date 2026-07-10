@@ -95,7 +95,7 @@ public class Route {
         });
 
         // check if the terminal has a bus for us
-        Optional<Bus> toDispatch = terminal.getBusForDispatchIfExists();
+        Optional<Bus> toDispatch = terminal.getBusForDispatchIfExists(this);
         if(toDispatch.isPresent()){
             buses.add(toDispatch.get());
         }
