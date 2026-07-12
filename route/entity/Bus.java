@@ -41,6 +41,10 @@ public class Bus {
         return distancePerTick;
     }
 
+    public int getPassengerBoardTimeTicks(){
+        return ticksPerPassengerBoardTime;
+    }
+
     public int getNextStopId(){
         return nextStopId;
     }

@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 
+import route.control.HeadwayState;
 import route.control.interfaces.ExpressController;
 import route.control.interfaces.HoldController;
 import route.control.interfaces.Terminal;
 import route.entity.Bus;
 import route.entity.Stop;
+import telemetry.HeadwayStateCollector;
 import telemetry.PassengerCollector;
 
 public class Route {
@@ -23,9 +25,10 @@ public class Route {
     private ExpressController expressController;
     private HoldController holdController;
     private PassengerCollector passengerCollector;
+    private HeadwayStateCollector headwayStateCollector;
     private Terminal terminal;
 
-    public Route(ArrayList<Stop> stops, long seed, ExpressController expressController, HoldController holdController, PassengerCollector passengerCollector, Terminal terminal){
+    public Route(ArrayList<Stop> stops, long seed, ExpressController expressController, HoldController holdController, PassengerCollector passengerCollector, Terminal terminal, HeadwayStateCollector headwayStateCollector){
         this.stops = stops;
         this.seed = seed;
         this.routeRNG = new Random(seed);
@@ -33,6 +36,7 @@ public class Route {
         this.passengerCollector = passengerCollector;
         this.terminal = terminal;
         this.holdController = holdController;
+        this.headwayStateCollector = headwayStateCollector;
         for(Stop s : stops){
             stopPositions.add(s.getLocation());
         }
@@ -44,6 +48,14 @@ public class Route {
 
     public ArrayList<Double> getStopLocations(){
         return stopPositions;
+    }
+
+    public ArrayList<Bus> getBuses(){
+        return buses;
+    }
+
+    public ArrayList<Stop> getStops(){
+        return stops;
     }
 
     /**
@@ -108,5 +120,7 @@ public class Route {
         if(toDispatch.isPresent()){
             buses.add(toDispatch.get());
         }
+
+        headwayStateCollector.collect(new HeadwayState(this));
     }
 }

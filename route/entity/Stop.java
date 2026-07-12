@@ -36,6 +36,10 @@ public class Stop {
         return location;
     }
 
+    public int numPassengers(){
+        return passengers.size();
+    }
+
     /**
      * 
      * @param p Passenger to add to this Stop's waiting Passengers
