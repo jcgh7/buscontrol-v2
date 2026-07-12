@@ -15,6 +15,8 @@ public class Route {
     private ArrayList<Stop> stops;
     private ArrayList<Bus> buses = new ArrayList<>();
 
+    private ArrayList<Double> stopPositions = new ArrayList<>();
+
     private final long seed;
     private Random routeRNG;
 
@@ -31,10 +33,17 @@ public class Route {
         this.passengerCollector = passengerCollector;
         this.terminal = terminal;
         this.holdController = holdController;
+        for(Stop s : stops){
+            stopPositions.add(s.getLocation());
+        }
     }
 
     public long getSeed(){
         return seed;
+    }
+
+    public ArrayList<Double> getStopLocations(){
+        return stopPositions;
     }
 
     /**

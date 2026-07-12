@@ -37,6 +37,10 @@ public class Bus {
         distancePerTick = dpt;
     }
 
+    public double getDistancePerTick(){
+        return distancePerTick;
+    }
+
     public int getNextStopId(){
         return nextStopId;
     }
