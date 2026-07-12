@@ -12,8 +12,11 @@ public class DefaultScheduleTerminal implements Terminal {
     private int time = 0;
     private ArrayList<Integer> schedule;
     
-    public DefaultScheduleTerminal(ArrayList<Integer> schedule){
+    public DefaultScheduleTerminal(ArrayList<Integer> schedule, int numStartingBuses, double distancePerTick){
         this.schedule = schedule;
+        for(int i = 0; i < numStartingBuses; i++){
+            addBusToTerminal(new Bus(i, 0, distancePerTick));
+        }
     }
 
     public void terminate(Bus b){

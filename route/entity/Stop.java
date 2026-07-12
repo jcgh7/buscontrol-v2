@@ -16,12 +16,15 @@ public class Stop {
 
     private Route route;
 
-    public Stop(Route route, int id, double passengersGeneratedPerTick, double location, boolean isTerminal){
-        this.id = id;
+    public Stop(int id, double passengersGeneratedPerTick, double location, boolean isTerminal){
+        this.id = id; // note: stop ids must be in ascending order, in increments of one
         this.passengersGeneratedPerTick = passengersGeneratedPerTick;
-        this.route = route;
         this.location = location;
         this.isTerminal = isTerminal;
+    }
+
+    public void initRoute(Route r){
+        this.route = r;
     }
 
     public int getId(){

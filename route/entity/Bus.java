@@ -23,6 +23,7 @@ public class Bus {
     public void reset(){
         location = 0;
         dwellTicks = 0;
+        nextStopId = 0;
     }
 
     public int getRun() {
