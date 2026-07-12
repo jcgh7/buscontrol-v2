@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import route.control.HeadwayState;
 
 public class HeadwayStateCollector {
+    // second dumbest class ever written
     private int minHeadwayTicks = 100;
     private int maxHeadwayTicks = -100;
     private int totalHeadwayTicks = 0;
@@ -13,8 +14,14 @@ public class HeadwayStateCollector {
     public HeadwayStateCollector(){}
 
     public void collect(HeadwayState hs){
+        if(!hs.hasInfo()){
+            return;
+        }
         ArrayList<Integer> orderedTickHeadways = hs.getOrderedTickHeadways();
         for(int headway : orderedTickHeadways){
+            if(headway == -1){
+                return;
+            }
             headwaysCollected++;
             if(headway < minHeadwayTicks){
                 minHeadwayTicks = headway;
