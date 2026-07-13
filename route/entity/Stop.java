@@ -62,6 +62,7 @@ public class Stop {
         passengers.removeIf(p -> {
             if(p.getDestinationStopId() >= nextServedStopID){
                 toBoard.add(p);
+                p.setOnBus(true);
                 return true;
             }
             return false;

@@ -38,11 +38,16 @@ public class HeadwayState {
             }
             orderedTickHeadwaysArray[i] = (int)Math.round(headwayTicks);
         }
-
     }
 
     public ArrayList<Integer> getOrderedTickHeadways(){
-        return new ArrayList<Integer>(Arrays.asList(orderedTickHeadwaysArray));
+        ArrayList<Integer> o = new ArrayList<Integer>();
+        for(int i = 0; i < 50; i++){
+            if(orderedTickHeadwaysArray[i] != -1){
+                o.add(orderedTickHeadwaysArray[i]);
+            }
+        }
+        return o;
     }
 
     public boolean hasInfo(){

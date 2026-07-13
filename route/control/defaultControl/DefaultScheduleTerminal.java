@@ -43,4 +43,11 @@ public class DefaultScheduleTerminal implements Terminal {
             buses.remove(0);
         }
     }
+
+    public void tick(){
+        time++;
+        if(time == 3600){
+            time = 0;
+        }
+    }
 }

@@ -8,11 +8,11 @@ import route.control.defaultControl.DefaultScheduleTerminal;
 public class Main {
     public static void main(String args[]){
         // define a tick as a second, and define distance as in meters
-        long seed = 0;
+        long seed = 1;
         int ticksToRunFor = 42000;
 
-        ArrayList<Integer> schedule = new ArrayList<>(Arrays.asList(0, 10, 20, 30, 40, 50));
-        int numStartingBuses = 12;
+        ArrayList<Integer> schedule = new ArrayList<>(Arrays.asList(0, 600, 1200, 1800, 2400, 3000));
+        int numStartingBuses = 10;
         double distancePerTick = 8.94; // 20mph 
 
         int numStops = 60;
@@ -28,5 +28,6 @@ public class Main {
 
         Simulation simulation = new Simulation(seed, ticksToRunFor, defaultScheduleTerminal, defaultHoldController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
         simulation.run();
+        System.out.println(simulation.getPassengerCollector().getAverageWaitTime()/60);
     }
 }

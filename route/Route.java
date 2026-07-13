@@ -28,6 +28,8 @@ public class Route {
     private HeadwayStateCollector headwayStateCollector;
     private Terminal terminal;
 
+    private int internalTime = 0;
+
     public Route(ArrayList<Stop> stops, long seed, ExpressController expressController, HoldController holdController, PassengerCollector passengerCollector, Terminal terminal, HeadwayStateCollector headwayStateCollector){
         this.stops = stops;
         this.seed = seed;
@@ -83,9 +85,12 @@ public class Route {
     }
 
     public void tick(){
+        internalTime++;
         // Stops just need to be ticked, they do not need anything fancy
         for(Stop s : stops){ 
-            s.tick();
+            if(s.getId()*120 < internalTime){
+                s.tick();
+            }
         }
 
         // buses require all of the logic to be done for them
@@ -121,6 +126,8 @@ public class Route {
             buses.add(toDispatch.get());
         }
 
-        headwayStateCollector.collect(new HeadwayState(this));
+        terminal.tick();
+
+        // headwayStateCollector.collect(new HeadwayState(this)); // i mean im very dumb this entire headway collector just doesn't work because i can't assume it is sorted
     }
 }

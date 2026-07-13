@@ -19,9 +19,6 @@ public class HeadwayStateCollector {
         }
         ArrayList<Integer> orderedTickHeadways = hs.getOrderedTickHeadways();
         for(int headway : orderedTickHeadways){
-            if(headway == -1){
-                return;
-            }
             headwaysCollected++;
             if(headway < minHeadwayTicks){
                 minHeadwayTicks = headway;

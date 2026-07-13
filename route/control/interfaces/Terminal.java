@@ -10,4 +10,5 @@ public interface Terminal {
     public Optional<Bus> getBusForDispatchIfExists(Route r);
     public void addBusToTerminal(Bus b);
     public void removeBusFromTerminal();
+    public void tick();
 }
