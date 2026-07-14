@@ -31,7 +31,6 @@ public class HeadwayState {
                 sortedBuses.add(buses.get(i));
             }
         }
-
         ArrayList<Double> stopPositions = route.getStopLocations();
         for(int i = 0; i < sortedBuses.size()-1; i++){
             double headwayTicks = 0;
@@ -55,10 +54,11 @@ public class HeadwayState {
             // TODO refine this
             double threshold = terminalLocation - 20*60*sortedBuses.get(i).getDistancePerTick(); // once again an arbitrary value, this time 20 minutes away in pure distance (so that arrivals are ~30 min away or less incl passenger boarding time)
             if(sortedBuses.get(i).getLocation() > threshold && sortedBuses.get(i+1).getLocation() > threshold){
-                terminalArrivalListBasedHeadways.add(headways.get(i));
+                if(headways.get(i) < 30*60){
+                    terminalArrivalListBasedHeadways.add(headways.get(i));
+                }
             }
         }
-
     }
 
     public ArrayList<Integer> getOrderedTickHeadways(){

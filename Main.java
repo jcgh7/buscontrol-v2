@@ -34,5 +34,6 @@ public class Main {
         for(int headway = 0; headway < 30; headway++){
             System.out.println(headway+","+terminalBasedHeadwayCounts.get(headway));
         }
+        System.out.println("debug: " + simulation.getHeadwayStateCollector().getMinHeadway());
     }
 }
