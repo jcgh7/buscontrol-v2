@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import route.Route;
 import route.entity.Bus;
-import route.entity.Stop;
 
 public class HeadwayState {
     private boolean hasInfo = true;
     private ArrayList<Integer> headways = new ArrayList<>();
+    private ArrayList<Integer> terminalArrivalListBasedHeadways = new ArrayList<>();
 
     public HeadwayState(Route route){
         ArrayList<Bus> buses = route.getBuses();
@@ -34,22 +34,39 @@ public class HeadwayState {
 
         ArrayList<Double> stopPositions = route.getStopLocations();
         for(int i = 0; i < sortedBuses.size()-1; i++){
-            System.out.println(sortedBuses.get(i).getLocation());
             double headwayTicks = 0;
             double distance = sortedBuses.get(i+1).getLocation() - sortedBuses.get(i).getLocation();
             headwayTicks += distance / sortedBuses.get(i).getDistancePerTick();
             for(Double position : stopPositions){
                 if(position > sortedBuses.get(i).getLocation() && position < sortedBuses.get(i+1).getLocation()){
+                    // TODO refine this
                     headwayTicks+=20; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
                 }
             }
             headways.add((int)Math.round(headwayTicks));
         }
 
+        // do the terminal arrival time based headways for fingerprinting
+        if(route.getInternalTime()%60!=0){
+            return;
+        }
+        double terminalLocation = stopPositions.get(stopPositions.size()-1);
+        for(int i = 0; i < sortedBuses.size()-1; i++){
+            // TODO refine this
+            double threshold = terminalLocation - 20*60*sortedBuses.get(i).getDistancePerTick(); // once again an arbitrary value, this time 20 minutes away in pure distance (so that arrivals are ~30 min away or less incl passenger boarding time)
+            if(sortedBuses.get(i).getLocation() > threshold && sortedBuses.get(i+1).getLocation() > threshold){
+                terminalArrivalListBasedHeadways.add(headways.get(i));
+            }
+        }
+
     }
 
     public ArrayList<Integer> getOrderedTickHeadways(){
         return headways;
+    }
+
+    public ArrayList<Integer> getTerminalArrivalListBasedHeadways(){
+        return terminalArrivalListBasedHeadways;
     }
 
     public boolean hasInfo(){

@@ -48,6 +48,10 @@ public class Route {
         return seed;
     }
 
+    public int getInternalTime(){
+        return internalTime;
+    }
+
     public ArrayList<Double> getStopLocations(){
         return stopPositions;
     }

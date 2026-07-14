@@ -10,8 +10,14 @@ public class HeadwayStateCollector {
     private int maxHeadwayTicks = -100;
     private int totalHeadwayTicks = 0;
     private int headwaysCollected = 0;
+
+    private ArrayList<Integer> counts = new ArrayList<>();
     
-    public HeadwayStateCollector(){}
+    public HeadwayStateCollector(){
+        for(int i = 0; i < 30; i++){
+            counts.add(0);
+        }
+    }
 
     public void collect(HeadwayState hs){
         if(!hs.hasInfo()){
@@ -27,6 +33,11 @@ public class HeadwayStateCollector {
                 maxHeadwayTicks = headway;
             }
             totalHeadwayTicks += headway;
+        }
+
+        ArrayList<Integer> terminalBasedHeadways = hs.getTerminalArrivalListBasedHeadways();
+        for(int headway : terminalBasedHeadways){
+            counts.set(headway/60, counts.get(headway/60) + 1);
         }
     }
 
@@ -44,5 +55,9 @@ public class HeadwayStateCollector {
 
     public int getHeadwayVariance(){
         return maxHeadwayTicks - minHeadwayTicks;
+    }
+
+    public ArrayList<Integer> getTerminalHeadwayCounts(){
+        return counts;
     }
 }
