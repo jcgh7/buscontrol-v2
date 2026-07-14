@@ -128,6 +128,6 @@ public class Route {
 
         terminal.tick();
 
-        // headwayStateCollector.collect(new HeadwayState(this)); // i mean im very dumb this entire headway collector just doesn't work because i can't assume it is sorted
+        headwayStateCollector.collect(new HeadwayState(this)); 
     }
 }

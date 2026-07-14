@@ -28,6 +28,5 @@ public class Main {
 
         Simulation simulation = new Simulation(seed, ticksToRunFor, defaultScheduleTerminal, defaultHoldController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
         simulation.run();
-        System.out.println(simulation.getPassengerCollector().getAverageWaitTime()/60);
     }
 }
