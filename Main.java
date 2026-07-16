@@ -8,7 +8,7 @@ import route.control.defaultControl.DefaultScheduleTerminal;
 public class Main {
     public static void main(String args[]){
         // define a tick as a second, and define distance as in meters
-        long seed = 3;
+        long seed = 5;
         int ticksToRunFor = 42000;
 
         ArrayList<Integer> schedule = new ArrayList<>(Arrays.asList(0, 600, 1200, 1800, 2400, 3000));
@@ -34,6 +34,5 @@ public class Main {
         for(int headway = 0; headway < 30; headway++){
             System.out.println(headway+","+terminalBasedHeadwayCounts.get(headway));
         }
-        System.out.println("debug: " + simulation.getHeadwayStateCollector().getMinHeadway());
     }
 }

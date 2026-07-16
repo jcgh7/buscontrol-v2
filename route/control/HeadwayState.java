@@ -39,10 +39,13 @@ public class HeadwayState {
             for(Double position : stopPositions){
                 if(position > sortedBuses.get(i).getLocation() && position < sortedBuses.get(i+1).getLocation()){
                     // TODO refine this
-                    headwayTicks+=20; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
+                    headwayTicks+=25; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
                 }
             }
             headways.add((int)Math.round(headwayTicks));
+            // if(headwayTicks < 31){
+            //     System.out.println("Logged a headway of " + (int)Math.round(headwayTicks) + " ticks. The bus postions are " + sortedBuses.get(i).getLocation() + " and " + sortedBuses.get(i+1).getLocation());
+            // }
         }
 
         // do the terminal arrival time based headways for fingerprinting

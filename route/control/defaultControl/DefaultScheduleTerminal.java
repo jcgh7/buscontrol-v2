@@ -26,6 +26,7 @@ public class DefaultScheduleTerminal implements Terminal {
 
     public Optional<Bus> getBusForDispatchIfExists(Route r){
         if(buses.size() != 0 && schedule.indexOf(time) != -1){
+            //System.out.println("[DefaultScheduleTerminal]: Dispatching bus " + buses.get(0).getRun() + " at " + time);
             Bus toDispatch = buses.get(0);
             buses.remove(0);
             return Optional.of(toDispatch);

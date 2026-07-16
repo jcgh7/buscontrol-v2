@@ -6,7 +6,7 @@ public class Bus {
     private int run;
 
     private ArrayList<Passenger> passengers = new ArrayList<>();
-    private final int ticksPerPassengerBoardTime = 10;
+    private final int ticksPerPassengerBoardTime = 5;
     private int dwellTicks = 0;
 
     private double location = 0;
@@ -67,6 +67,7 @@ public class Bus {
     }
 
     public void addDwellTicks(int ticks) {
+        //System.out.println("[Bus " + run + "]: Added " + ticks + " ticks of dwell time");
         dwellTicks += ticks;
     }
 

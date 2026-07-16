@@ -102,14 +102,17 @@ public class Route {
             Optional<Stop> nextStop = getStopFromId(bus.getNextStopId()); 
             if(nextStop.isPresent()){ // check if a Stop with the Bus's nextStopID exists, and if it doesn't stop the program
                 if(bus.getLocation() >= nextStop.get().getLocation()){ // if the Bus is at the next Stop
+                    //System.out.println("[Bus " + bus.getRun() + "]: Arrived at stop " + nextStop.get().getId());
                     Stop currentStop = nextStop.get(); // we are now at that Stop
                     if(!currentStop.isTerminal()){ // if it is not a terminal
                         bus.setNextStopId(expressController.getNextStopIdForBus(bus, this)); // allow the expresscontroller to figure out what the next Stop is
+                        //System.out.println("[Bus " + bus.getRun() + "]: Next stop ID is " + bus.getNextStopId());
                         bus.boardPassengers(currentStop.getPassengersForBoarding(bus.getNextStopId())); // board Passengers that are going to or after the next served Stop, this adds dwell time automatically
                         passengerCollector.collect(bus.deboardPassengersWithDestinationId(currentStop.getId())); // collect deboarding passengers
                         bus.addDwellTicks(holdController.getExtraDwellTimeTicks(bus, this)); // allow the holdcontroller to add extra time
                     }
                     else{
+                        //System.out.println("[Bus " + bus.getRun() + "]: Arrived at the terminal");
                         passengerCollector.collect(bus.deboardPassengersWithDestinationId(currentStop.getId())); // collect deboarding passengers
                         terminal.terminate(bus); // hand off the bus to the terminal
                         return true; // remove it from active buses
@@ -117,8 +120,7 @@ public class Route {
                 }
             }
             else{
-                System.err.println("A Bus had a next Stop ID that did not correspond to a real stop. Quitting..."); // shouldn't be possible, but we want to catch it if it happens
-                assert false;
+                System.err.println("A Bus had a next Stop ID that did not correspond to a real stop."); // shouldn't be possible, but we want to catch it if it happens
             }
             bus.tick();
             return false;
