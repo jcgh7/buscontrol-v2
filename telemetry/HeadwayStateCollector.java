@@ -27,8 +27,8 @@ public class HeadwayStateCollector {
         }
         ArrayList<Integer> orderedTickHeadways = hs.getOrderedTickHeadways();
         for(int headway : orderedTickHeadways){
-            if(headway/60 < 30){
-                allCounts.set(headway/60, allCounts.get(headway/60) + 1);
+            if((int)Math.round(headway/60.0) < 30){
+                allCounts.set((int)Math.round(headway/60.0), allCounts.get((int)Math.round(headway/60.0)) + 1);
             }
             headwaysCollected++;
             if(headway < minHeadwayTicks){

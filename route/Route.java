@@ -20,7 +20,7 @@ public class Route {
     private ArrayList<Double> stopPositions = new ArrayList<>();
 
     private final long seed;
-    private Random routeRNG;
+    public Random routeRNG;
 
     private ExpressController expressController;
     private HoldController holdController;
@@ -110,8 +110,8 @@ public class Route {
                         bus.boardPassengers(currentStop.getPassengersForBoarding(bus.getNextStopId())); // board Passengers that are going to or after the next served Stop, this adds dwell time automatically
                         passengerCollector.collect(bus.deboardPassengersWithDestinationId(currentStop.getId())); // collect deboarding passengers
                         bus.addDwellTicks(holdController.getExtraDwellTimeTicks(bus, this)); // allow the holdcontroller to add extra time
-                        if(routeRNG.nextInt(100) < 25){
-                            bus.addDwellTicks(routeRNG.nextInt(61));
+                        if(routeRNG.nextInt(100) < 10){
+                            bus.addDwellTicks(routeRNG.nextInt(70));
                         }
                     }
                     else{

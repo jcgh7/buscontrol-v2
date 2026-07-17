@@ -41,11 +41,20 @@ public class HeadwayState {
             for(Stop stop : stops){
                 if(stop.getLocation() > sortedBuses.get(i).getLocation() && stop.getLocation() < sortedBuses.get(i+1).getLocation()){
                     // TODO refine this
-                    //headwayTicks+=25; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
-                    headwayTicks+=stop.numPassengers()*sortedBuses.get(i).getPassengerBoardTimeTicks() + 15;
+                    headwayTicks+=20; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
+                    // headwayTicks+=stop.numPassengers()*sortedBuses.get(i).getPassengerBoardTimeTicks() + 12;
+                    // System.out.println(stop.numPassengers()*sortedBuses.get(i).getPassengerBoardTimeTicks() + 12);
                 }
             }
-            headways.add((int)Math.round(headwayTicks));
+            if((int)Math.round(headwayTicks/60) == 0 || (int)Math.round(headwayTicks/60) == 1){
+                headways.add(route.routeRNG.nextInt(8*60));
+            }
+            else{   
+                headways.add((int)Math.round(headwayTicks));
+            }
+
+            // headways.add((int)Math.round(headwayTicks));
+
             // if(headwayTicks < 31){
             //     System.out.println("Logged a headway of " + (int)Math.round(headwayTicks) + " ticks. The bus postions are " + sortedBuses.get(i).getLocation() + " and " + sortedBuses.get(i+1).getLocation());
             // }

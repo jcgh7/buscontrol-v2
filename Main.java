@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import route.control.defaultControl.DefaultExpressController;
 import route.control.defaultControl.DefaultHoldController;
@@ -26,8 +27,8 @@ public class Main {
         DefaultHoldController defaultHoldController = new DefaultHoldController();
         DefaultExpressController defaultExpressController = new DefaultExpressController();
 
-        ArrayList<Integer> averageTotalCounts = new ArrayList<Integer>();
-        int trials = 20;
+        LinkedList<Integer> averageTotalCounts = new LinkedList<Integer>();
+        int trials = 1000;
 
         for(int i = 0; i < 30; i++){
             averageTotalCounts.add(0);
@@ -35,7 +36,7 @@ public class Main {
 
         for(int i = 0; i < trials; i++){
             System.out.println(Math.round(i*100/trials) + "% complete");
-            Simulation simulation = new Simulation(seed, ticksToRunFor, defaultScheduleTerminal, defaultHoldController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
+            Simulation simulation = new Simulation((long)i, ticksToRunFor, defaultScheduleTerminal, defaultHoldController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
             simulation.run();
 
             // data parsing
