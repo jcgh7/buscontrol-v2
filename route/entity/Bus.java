@@ -6,7 +6,7 @@ public class Bus {
     private int run;
 
     private ArrayList<Passenger> passengers = new ArrayList<>();
-    private final int ticksPerPassengerBoardTime = 5;
+    private final int ticksPerPassengerBoardTime = 3;
     private int dwellTicks = 0;
 
     private double location = 0;

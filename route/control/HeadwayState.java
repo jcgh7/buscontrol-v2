@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import route.Route;
 import route.entity.Bus;
+import route.entity.Stop;
 
 public class HeadwayState {
     private boolean hasInfo = true;
@@ -32,14 +33,16 @@ public class HeadwayState {
             }
         }
         ArrayList<Double> stopPositions = route.getStopLocations();
+        ArrayList<Stop> stops = route.getStops();
         for(int i = 0; i < sortedBuses.size()-1; i++){
             double headwayTicks = 0;
             double distance = sortedBuses.get(i+1).getLocation() - sortedBuses.get(i).getLocation();
             headwayTicks += distance / sortedBuses.get(i).getDistancePerTick();
-            for(Double position : stopPositions){
-                if(position > sortedBuses.get(i).getLocation() && position < sortedBuses.get(i+1).getLocation()){
+            for(Stop stop : stops){
+                if(stop.getLocation() > sortedBuses.get(i).getLocation() && stop.getLocation() < sortedBuses.get(i+1).getLocation()){
                     // TODO refine this
-                    headwayTicks+=25; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
+                    //headwayTicks+=25; // untuned value - could go based on actual pax counts but a) im lazy and b) that is unavailable info irl
+                    headwayTicks+=stop.numPassengers()*sortedBuses.get(i).getPassengerBoardTimeTicks() + 15;
                 }
             }
             headways.add((int)Math.round(headwayTicks));

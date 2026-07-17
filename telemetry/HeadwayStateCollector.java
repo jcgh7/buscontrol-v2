@@ -12,10 +12,12 @@ public class HeadwayStateCollector {
     private int headwaysCollected = 0;
 
     private ArrayList<Integer> counts = new ArrayList<>();
+    private ArrayList<Integer> allCounts = new ArrayList<>();
     
     public HeadwayStateCollector(){
         for(int i = 0; i < 30; i++){
             counts.add(0);
+            allCounts.add(0);
         }
     }
 
@@ -25,6 +27,9 @@ public class HeadwayStateCollector {
         }
         ArrayList<Integer> orderedTickHeadways = hs.getOrderedTickHeadways();
         for(int headway : orderedTickHeadways){
+            if(headway/60 < 30){
+                allCounts.set(headway/60, allCounts.get(headway/60) + 1);
+            }
             headwaysCollected++;
             if(headway < minHeadwayTicks){
                 minHeadwayTicks = headway;
@@ -59,5 +64,9 @@ public class HeadwayStateCollector {
 
     public ArrayList<Integer> getTerminalHeadwayCounts(){
         return counts;
+    }
+
+    public ArrayList<Integer> getAllCounts(){
+        return allCounts;
     }
 }

@@ -110,6 +110,9 @@ public class Route {
                         bus.boardPassengers(currentStop.getPassengersForBoarding(bus.getNextStopId())); // board Passengers that are going to or after the next served Stop, this adds dwell time automatically
                         passengerCollector.collect(bus.deboardPassengersWithDestinationId(currentStop.getId())); // collect deboarding passengers
                         bus.addDwellTicks(holdController.getExtraDwellTimeTicks(bus, this)); // allow the holdcontroller to add extra time
+                        if(routeRNG.nextInt(100) < 25){
+                            bus.addDwellTicks(routeRNG.nextInt(61));
+                        }
                     }
                     else{
                         //System.out.println("[Bus " + bus.getRun() + "]: Arrived at the terminal");
