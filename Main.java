@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import route.control.defaultControl.DefaultExpressController;
 import route.control.defaultControl.DefaultHoldController;
 import route.control.defaultControl.DefaultScheduleTerminal;
+import route.control.reactiveControl.ReactiveHoldController;
 
 public class Main {
     public static void main(String args[]){
@@ -23,12 +24,11 @@ public class Main {
         double minPassengerGenPerTick = 0.0013; // 0.8 pax/10min
         double maxPassengerGenPerTick = 0.013; // 8.0 pax/10min
 
-        DefaultScheduleTerminal defaultScheduleTerminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
-        DefaultHoldController defaultHoldController = new DefaultHoldController();
+        DefaultHoldController holdController = new DefaultHoldController();
         DefaultExpressController defaultExpressController = new DefaultExpressController();
 
         LinkedList<Integer> averageTotalCounts = new LinkedList<Integer>();
-        int trials = 1000;
+        int trials = 10;
 
         for(int i = 0; i < 30; i++){
             averageTotalCounts.add(0);
@@ -36,7 +36,8 @@ public class Main {
 
         for(int i = 0; i < trials; i++){
             System.out.println(Math.round(i*100/trials) + "% complete");
-            Simulation simulation = new Simulation((long)i, ticksToRunFor, defaultScheduleTerminal, defaultHoldController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
+            DefaultScheduleTerminal defaultScheduleTerminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
+            Simulation simulation = new Simulation((long)i, ticksToRunFor, defaultScheduleTerminal, holdController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
             simulation.run();
 
             // data parsing

@@ -10,10 +10,11 @@ public class HeadwayState {
     private boolean hasInfo = true;
     private ArrayList<Integer> headways = new ArrayList<>();
     private ArrayList<Integer> terminalArrivalListBasedHeadways = new ArrayList<>();
+    public ArrayList<Bus> sortedBuses = new ArrayList<>();
 
     public HeadwayState(Route route){
         ArrayList<Bus> buses = route.getBuses();
-        ArrayList<Bus> sortedBuses = new ArrayList<>();
+        sortedBuses = new ArrayList<>();
         if(buses.size() < 2){
             hasInfo = false;
             return;
@@ -47,13 +48,13 @@ public class HeadwayState {
                 }
             }
             if((int)Math.round(headwayTicks/60) == 0 || (int)Math.round(headwayTicks/60) == 1){
-                headways.add(route.routeRNG.nextInt(8*60));
+                headways.add(route.routeRNG.nextInt(4*60));
             }
             else{   
                 headways.add((int)Math.round(headwayTicks));
             }
 
-            // headways.add((int)Math.round(headwayTicks));
+            headways.add((int)Math.round(headwayTicks));
 
             // if(headwayTicks < 31){
             //     System.out.println("Logged a headway of " + (int)Math.round(headwayTicks) + " ticks. The bus postions are " + sortedBuses.get(i).getLocation() + " and " + sortedBuses.get(i+1).getLocation());
