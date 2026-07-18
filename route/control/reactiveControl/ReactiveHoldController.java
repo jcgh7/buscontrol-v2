@@ -9,9 +9,12 @@ import route.entity.Bus;
 
 public class ReactiveHoldController implements HoldController{
     public int holdThresholdMin = 5;
-    public int holdAmountMin = 2;
+    public int holdAmountMin = 3;
 
-    public ReactiveHoldController(){}
+    public ReactiveHoldController(int holdThresholdMin, int holdAmountMin){
+        this.holdAmountMin = holdAmountMin;
+        this.holdThresholdMin = holdThresholdMin;
+    }
 
     public int getExtraDwellTimeTicks(Bus b, Route r){
         HeadwayState hs = new HeadwayState(r);

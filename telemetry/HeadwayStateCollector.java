@@ -69,4 +69,25 @@ public class HeadwayStateCollector {
     public ArrayList<Integer> getAllCounts(){
         return allCounts;
     }
+
+    public double distributionIntegral(){
+        ArrayList<Integer> data = new ArrayList<>(allCounts);
+        ArrayList<Double> redistributed = new ArrayList<>(30);
+        for(int i = 0; i < 30; i++){
+            redistributed.add(data.get(i)/(double)(30-i));
+        }
+        double max = 0.0;
+        for(double value : redistributed){
+            if(value > max){
+                max = value;
+            }
+        }
+        ArrayList<Double> normalized = new ArrayList<>(30);
+        double total = 0;
+        for(double value : redistributed){
+            normalized.add(value/max);
+            total += value/max;
+        }
+        return total;
+    }
 }

@@ -54,7 +54,7 @@ public class HeadwayState {
                 headways.add((int)Math.round(headwayTicks));
             }
 
-            headways.add((int)Math.round(headwayTicks));
+            //headways.add((int)Math.round(headwayTicks));
 
             // if(headwayTicks < 31){
             //     System.out.println("Logged a headway of " + (int)Math.round(headwayTicks) + " ticks. The bus postions are " + sortedBuses.get(i).getLocation() + " and " + sortedBuses.get(i+1).getLocation());

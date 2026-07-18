@@ -1,16 +1,41 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 
 import route.control.defaultControl.DefaultExpressController;
 import route.control.defaultControl.DefaultHoldController;
 import route.control.defaultControl.DefaultScheduleTerminal;
 import route.control.reactiveControl.ReactiveHoldController;
+import telemetry.Datapoint;
 
 public class Main {
     public static void main(String args[]){
+        // double bestDistributionIntegral = 1000;
+        // int bestHoldTime = 0;
+        // int bestHoldThreshold = 0;
+        // for(int holdTime = 0; holdTime < 5; holdTime++){
+        //     for(int holdThreshold = 0; holdThreshold < 5; holdThreshold++){
+        //         Datapoint datapoint = scheduleTerminalReactiveParams(holdTime, holdThreshold, 10);
+        //         System.out.println("DISTRIBUTION INTEGRAL " + datapoint.distributionIntegral);
+        //         if(datapoint.distributionIntegral < bestDistributionIntegral){
+        //             bestDistributionIntegral = datapoint.distributionIntegral;
+        //             bestHoldThreshold = holdThreshold;
+        //             bestHoldTime = holdTime;
+        //         }
+        //     }
+        // }
+        // System.out.println("Best distributionIntegral: " + bestDistributionIntegral);
+        // System.out.println("Hold for " + bestHoldTime + " min at threshold " + bestHoldThreshold);
+
+        Datapoint d = scheduleTerminalReactiveParams(4, 4, 10);
+        for(int count : d.headwayDistribution){
+            System.out.println(count);
+        }
+        System.out.println("Average headway: " + d.averageHeadway);
+    }
+
+    public static Datapoint scheduleTerminalReactiveParams(int holdTimeMin, int holdThresholdMin, int trials){
+        System.out.println("Current config: " + holdTimeMin + " min hold at threshold " + holdThresholdMin);
         // define a tick as a second, and define distance as in meters
-        long seed = 3;
         int ticksToRunFor = 54000;
 
         ArrayList<Integer> schedule = new ArrayList<>(Arrays.asList(0, 600, 1200, 1800, 2400, 3000));
@@ -24,11 +49,15 @@ public class Main {
         double minPassengerGenPerTick = 0.0013; // 0.8 pax/10min
         double maxPassengerGenPerTick = 0.013; // 8.0 pax/10min
 
-        ReactiveHoldController holdController = new ReactiveHoldController();
+        ReactiveHoldController holdController = new ReactiveHoldController(holdThresholdMin, holdTimeMin);
         DefaultExpressController defaultExpressController = new DefaultExpressController();
 
-        LinkedList<Integer> averageTotalCounts = new LinkedList<Integer>();
-        int trials = 1000;
+        ArrayList<Integer> averageTotalCounts = new ArrayList<Integer>();
+
+        int totalPassengerWaitTime = 0;
+        int totalPassengerTravelTime = 0;
+        double totalDistributionIntegral = 0.0;
+        int totalAverageHeadway = 0;
 
         for(int i = 0; i < 30; i++){
             averageTotalCounts.add(0);
@@ -36,20 +65,35 @@ public class Main {
 
         for(int i = 0; i < trials; i++){
             System.out.println(Math.round(i*100/trials) + "% complete");
-            DefaultScheduleTerminal defaultScheduleTerminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
-            Simulation simulation = new Simulation((long)i, ticksToRunFor, defaultScheduleTerminal, holdController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
+            DefaultScheduleTerminal terminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
+            Simulation simulation = new Simulation((long)i, ticksToRunFor, terminal, holdController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
             simulation.run();
 
             // data parsing
-            ArrayList<Integer> terminalBasedHeadwayCounts = simulation.getHeadwayStateCollector().getAllCounts();
+            ArrayList<Integer> headwayCounts = simulation.getHeadwayStateCollector().getAllCounts();
             for(int headway = 0; headway < 30; headway++){
-                averageTotalCounts.set(headway, averageTotalCounts.get(headway) + terminalBasedHeadwayCounts.get(headway));
+                averageTotalCounts.set(headway, averageTotalCounts.get(headway) + headwayCounts.get(headway));
             }
+
+            totalPassengerWaitTime += simulation.getPassengerCollector().getAverageWaitTime();
+            totalPassengerTravelTime += simulation.getPassengerCollector().getAverageTravelTime();
+            totalDistributionIntegral += simulation.getHeadwayStateCollector().distributionIntegral();
+            totalAverageHeadway += simulation.getHeadwayStateCollector().getAverageHeadway();
         }
 
         for(int i = 0; i < 30; i++){
             averageTotalCounts.set(i, averageTotalCounts.get(i)/trials);
-            System.out.println(averageTotalCounts.get(i));
         }
+
+        totalPassengerTravelTime/=trials;
+        totalPassengerWaitTime/=trials;
+        totalPassengerTravelTime/=60;
+        totalPassengerWaitTime/=60;
+        totalDistributionIntegral/=trials;
+        totalAverageHeadway/=trials;
+        totalAverageHeadway/=60;
+
+        return new Datapoint(averageTotalCounts, totalPassengerWaitTime, totalPassengerTravelTime, totalDistributionIntegral, totalAverageHeadway);
+        
     }
 }
