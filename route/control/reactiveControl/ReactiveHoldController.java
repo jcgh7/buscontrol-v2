@@ -8,8 +8,8 @@ import route.control.interfaces.HoldController;
 import route.entity.Bus;
 
 public class ReactiveHoldController implements HoldController{
-    public int holdThresholdMin = 3;
-    public int holdAmountMin = 3;
+    public int holdThresholdMin = 5;
+    public int holdAmountMin = 2;
 
     public ReactiveHoldController(){}
 
@@ -23,7 +23,6 @@ public class ReactiveHoldController implements HoldController{
             Bus bus = sortedBuses.get(i);
             if(b.getRun() == bus.getRun()){
                 if(Math.round(hs.getOrderedTickHeadways().get(sortedBuses.indexOf(b))/60) <= holdThresholdMin){
-                    System.out.println("held a bus");
                     return holdAmountMin*60;
                 }
             }

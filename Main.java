@@ -24,11 +24,11 @@ public class Main {
         double minPassengerGenPerTick = 0.0013; // 0.8 pax/10min
         double maxPassengerGenPerTick = 0.013; // 8.0 pax/10min
 
-        DefaultHoldController holdController = new DefaultHoldController();
+        ReactiveHoldController holdController = new ReactiveHoldController();
         DefaultExpressController defaultExpressController = new DefaultExpressController();
 
         LinkedList<Integer> averageTotalCounts = new LinkedList<Integer>();
-        int trials = 10;
+        int trials = 1000;
 
         for(int i = 0; i < 30; i++){
             averageTotalCounts.add(0);
