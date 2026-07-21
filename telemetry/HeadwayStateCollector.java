@@ -40,6 +40,8 @@ public class HeadwayStateCollector {
             totalHeadwayTicks += headway;
         }
 
+        
+
         ArrayList<Integer> terminalBasedHeadways = hs.getTerminalArrivalListBasedHeadways();
         for(int headway : terminalBasedHeadways){
             counts.set(headway/60, counts.get(headway/60) + 1);

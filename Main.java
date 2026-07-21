@@ -25,16 +25,16 @@ public class Main {
         // }
         // System.out.println("Best distributionIntegral: " + bestDistributionIntegral);
         // System.out.println("Hold for " + bestHoldTime + " min at threshold " + bestHoldThreshold);
+        scheduleTerminalReactiveParams(0, 0, 1000);
 
-        Datapoint d = scheduleTerminalReactiveParams(4, 4, 10);
-        for(int count : d.headwayDistribution){
-            System.out.println(count);
-        }
-        System.out.println("Average headway: " + d.averageHeadway);
+        // Datapoint d = scheduleTerminalReactiveParams(4, 4, 10);
+        // for(int count : d.headwayDistribution){
+        //     System.out.println(count);
+        // }
+        // System.out.println("Average headway: " + d.averageHeadway);
     }
 
     public static Datapoint scheduleTerminalReactiveParams(int holdTimeMin, int holdThresholdMin, int trials){
-        System.out.println("Current config: " + holdTimeMin + " min hold at threshold " + holdThresholdMin);
         // define a tick as a second, and define distance as in meters
         int ticksToRunFor = 54000;
 
@@ -67,6 +67,7 @@ public class Main {
             System.out.println(Math.round(i*100/trials) + "% complete");
             DefaultScheduleTerminal terminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
             Simulation simulation = new Simulation((long)i, ticksToRunFor, terminal, holdController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
+            System.out.println("----------NEW SIMULATION----------");
             simulation.run();
 
             // data parsing
