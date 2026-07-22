@@ -66,14 +66,14 @@ public class HeadwayState {
             // }
         }
 
-        String out = "";
-        for (int headway : headways) {
-            out += headway;
-            out += ",";
-        }
+        // String out = ""; // TODO this outputs headways
+        // for (int headway : headways) {
+        //     out += headway;
+        //     out += ",";
+        // }
 
-        out = out.substring(0, out.length() - 1);
-        System.out.println(out);
+        // out = out.substring(0, out.length() - 1);
+        // System.out.println(out);
 
         // do the terminal arrival time based headways for fingerprinting
         if (route.getInternalTime() % 60 != 0) {

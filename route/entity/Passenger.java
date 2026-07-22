@@ -11,6 +11,13 @@ public class Passenger {
         this.destinationStopId = destinationStopId;
     }
 
+    public Passenger(Passenger toCopy){
+        this.destinationStopId = toCopy.getDestinationStopId();
+        this.ticksSpentTraveling = toCopy.getTicksSpentTraveling();
+        this.ticksSpentWaiting = toCopy.getTicksSpentWaiting();
+        this.isOnBus = toCopy.isOnBus();
+    }
+
     public void tick(){
         if(!isOnBus){
             ticksSpentWaiting++;
@@ -24,6 +31,10 @@ public class Passenger {
      */
     public void setOnBus(boolean b){
         isOnBus = b;
+    }
+
+    public boolean isOnBus(){
+        return isOnBus;
     }
 
     public int getTicksSpentWaiting(){

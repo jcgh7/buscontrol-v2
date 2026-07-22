@@ -20,6 +20,17 @@ public class Bus {
         this.distancePerTick = distancePerTick;
     }
 
+    public Bus(Bus toCopy){
+        this.run = toCopy.getRun();
+        this.nextStopId = toCopy.getNextStopId();
+        this.distancePerTick = toCopy.getDistancePerTick();
+        this.location = toCopy.getLocation();
+        this.dwellTicks = toCopy.getDwellTicks();
+        for(Passenger p : toCopy.getPassengers()){
+            this.passengers.add(new Passenger(p));
+        }
+    }
+
     public void reset(){
         location = 0;
         dwellTicks = 0;
@@ -28,6 +39,10 @@ public class Bus {
 
     public int getRun() {
         return run;
+    }
+
+    public int getDwellTicks(){
+        return dwellTicks;
     }
 
     public void setRun(int run){
@@ -64,6 +79,10 @@ public class Bus {
 
     public double getLocation(){
         return location;
+    }
+
+    public ArrayList<Passenger> getPassengers(){
+        return passengers;
     }
 
     public void addDwellTicks(int ticks) {
