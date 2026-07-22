@@ -23,6 +23,25 @@ public class Stop {
         this.isTerminal = isTerminal;
     }
 
+    public Stop(Stop s){
+        this.id = s.getId();
+        this.passengersGeneratedPerTick = s.getPassengersGeneratedPerTick();
+        this.passengerGenerationCounter = s.getPassengerGenerationCounter();
+        this.location = s.getLocation();
+        this.isTerminal = s.isTerminal();
+        for(Passenger p : s.getPassengers()){
+            this.passengers.add(new Passenger(p));
+        }
+    }
+
+    public double getPassengerGenerationCounter(){
+        return passengerGenerationCounter;
+    }
+
+    public double getPassengersGeneratedPerTick(){
+        return passengersGeneratedPerTick;
+    }
+
     public void initRoute(Route r){
         this.route = r;
     }
@@ -68,6 +87,10 @@ public class Stop {
             return false;
         });
         return toBoard;
+    }
+
+    public ArrayList<Passenger> getPassengers(){
+        return passengers;
     }
 
     public void tick(){

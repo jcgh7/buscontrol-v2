@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Random;
 
 import route.control.HeadwayState;
+import route.control.defaultControl.DefaultScheduleTerminal;
 import route.control.interfaces.ExpressController;
 import route.control.interfaces.HoldController;
 import route.control.interfaces.Terminal;
@@ -39,6 +40,22 @@ public class Route {
         this.terminal = terminal;
         this.holdController = holdController;
         this.headwayStateCollector = headwayStateCollector;
+        for(Stop s : stops){
+            stopPositions.add(s.getLocation());
+        }
+    }
+
+    public Route(Route route, PassengerCollector pc, HeadwayStateCollector hsc){
+        for(Stop s : route.getStops()){
+            this.stops.add(new Stop(s));
+        }
+        this.seed = route.getSeed();
+        this.routeRNG = new Random(seed);
+        this.expressController = route.expressController;
+        this.passengerCollector = pc;
+        this.terminal = new DefaultScheduleTerminal((DefaultScheduleTerminal)(route.terminal)); // TODO make this not limited to the defaultscheduleterminal
+        this.holdController = route.holdController;
+        this.headwayStateCollector = hsc;
         for(Stop s : stops){
             stopPositions.add(s.getLocation());
         }

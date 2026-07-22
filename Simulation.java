@@ -43,6 +43,15 @@ public class Simulation {
         }
     }
 
+    public Simulation(Simulation simulation, int numTicksToRunFor){
+        rng = simulation.rng;
+        this.numTicksToRunFor = numTicksToRunFor;
+        route = new Route(simulation.route, passengerCollector, headwayStateCollector);
+        for(Stop s : route.getStops()){
+            s.initRoute(route);
+        }
+    }
+
     public void run(){
         for(int i = 0; i < numTicksToRunFor; i++){
             //System.out.println("------------------------------NEW TICK------------------------------");

@@ -19,6 +19,14 @@ public class DefaultScheduleTerminal implements Terminal {
         }
     }
 
+    public DefaultScheduleTerminal(DefaultScheduleTerminal dst){
+        this.time = dst.time;
+        this.schedule = dst.schedule;
+        for(Bus b : dst.buses){
+            this.buses.add(new Bus(b));
+        }
+    }
+
     public void terminate(Bus b){
         b.reset();
         buses.add(b);
