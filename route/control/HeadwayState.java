@@ -69,21 +69,21 @@ public class HeadwayState {
             // }
         }
 
-        String out = ""; // TODO this outputs headways
-        for (int headway : headways) {
-        out += headway;
-        out += ",";
-        }
-        out = out.substring(0, out.length() - 1);
+        // String out = ""; // TODO this outputs headways
+        // for (int headway : headways) {
+        // out += headway;
+        // out += ",";
+        // }
+        // out = out.substring(0, out.length() - 1);
         // System.out.println(out);
 
-        try (FileWriter fw = new FileWriter("output.txt", true);
-                BufferedWriter bw = new BufferedWriter(fw)) {
-            bw.write(out);
-            bw.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        // try (FileWriter fw = new FileWriter("output.txt", true);
+        //         BufferedWriter bw = new BufferedWriter(fw)) {
+        //     bw.write(out);
+        //     bw.newLine();
+        // } catch (IOException e) {
+        //     e.printStackTrace();
+        // }
 
         
 

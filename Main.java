@@ -69,10 +69,10 @@ public class Main {
         }
 
         for(int i = 0; i < trials; i++){
-            //System.out.println(Math.round(i*100/trials) + "% complete");
+            System.out.println(Math.round(i*100/trials) + "% complete");
             DefaultScheduleTerminal terminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
             Simulation simulation = new Simulation((long)i, ticksToRunFor, terminal, holdController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
-            System.out.println("----------NEW SIMULATION----------");
+            // System.out.println("----------NEW SIMULATION----------");
             simulation.run();
 
             // data parsing
