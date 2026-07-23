@@ -1,5 +1,8 @@
 package route.control;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import route.Route;
@@ -66,14 +69,23 @@ public class HeadwayState {
             // }
         }
 
-        // String out = ""; // TODO this outputs headways
-        // for (int headway : headways) {
-        //     out += headway;
-        //     out += ",";
-        // }
-
-        // out = out.substring(0, out.length() - 1);
+        String out = ""; // TODO this outputs headways
+        for (int headway : headways) {
+        out += headway;
+        out += ",";
+        }
+        out = out.substring(0, out.length() - 1);
         // System.out.println(out);
+
+        try (FileWriter fw = new FileWriter("output.txt", true);
+                BufferedWriter bw = new BufferedWriter(fw)) {
+            bw.write(out);
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        
 
         // do the terminal arrival time based headways for fingerprinting
         if (route.getInternalTime() % 60 != 0) {
