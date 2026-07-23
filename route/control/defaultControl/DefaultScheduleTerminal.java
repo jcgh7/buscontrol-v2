@@ -11,6 +11,7 @@ public class DefaultScheduleTerminal implements Terminal {
     private ArrayList<Bus> buses = new ArrayList<>();
     private int time = 0;
     private ArrayList<Integer> schedule;
+    private int dispatchedBuses = 0;
     
     public DefaultScheduleTerminal(ArrayList<Integer> schedule, int numStartingBuses, double distancePerTick){
         this.schedule = schedule;
@@ -36,6 +37,7 @@ public class DefaultScheduleTerminal implements Terminal {
         if(buses.size() != 0 && schedule.indexOf(time) != -1){
             //System.out.println("[DefaultScheduleTerminal]: Dispatching bus " + buses.get(0).getRun() + " at " + time);
             Bus toDispatch = buses.get(0);
+            dispatchedBuses++;
             buses.remove(0);
             return Optional.of(toDispatch);
         }
@@ -58,5 +60,9 @@ public class DefaultScheduleTerminal implements Terminal {
         if(time == 3600){
             time = 0;
         }
+    }
+
+    public int getNumDispatchedBuses(){
+        return dispatchedBuses;
     }
 }

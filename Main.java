@@ -12,26 +12,31 @@ public class Main {
         // double bestDistributionIntegral = 1000;
         // int bestHoldTime = 0;
         // int bestHoldThreshold = 0;
+        // int bestWaitTime = 15;
         // for(int holdTime = 0; holdTime < 5; holdTime++){
         //     for(int holdThreshold = 0; holdThreshold < 5; holdThreshold++){
         //         Datapoint datapoint = scheduleTerminalReactiveParams(holdTime, holdThreshold, 10);
-        //         System.out.println("DISTRIBUTION INTEGRAL " + datapoint.distributionIntegral);
-        //         if(datapoint.distributionIntegral < bestDistributionIntegral){
+        //         if(datapoint.averageWaitTime < bestWaitTime){
         //             bestDistributionIntegral = datapoint.distributionIntegral;
         //             bestHoldThreshold = holdThreshold;
         //             bestHoldTime = holdTime;
+        //             bestWaitTime = datapoint.averageWaitTime;
         //         }
         //     }
         // }
         // System.out.println("Best distributionIntegral: " + bestDistributionIntegral);
+        // System.out.println("Best wait time: " + bestWaitTime);
         // System.out.println("Hold for " + bestHoldTime + " min at threshold " + bestHoldThreshold);
-        scheduleTerminalReactiveParams(0, 0, 1000);
 
-        // Datapoint d = scheduleTerminalReactiveParams(4, 4, 10);
-        // for(int count : d.headwayDistribution){
-        //     System.out.println(count);
-        // }
-        // System.out.println("Average headway: " + d.averageHeadway);
+        //scheduleTerminalReactiveParams(0, 0, 1000);
+
+        Datapoint d = scheduleTerminalReactiveParams(5, 4, 100);
+        for(int count : d.headwayDistribution){
+            System.out.println(count);
+        }
+        System.out.println("Average headway: " + d.averageHeadway);
+        System.out.println("Average travel time: " + d.averageTravelTime);
+        System.out.println("Average wait time: " + d.averageWaitTime);
     }
 
     public static Datapoint scheduleTerminalReactiveParams(int holdTimeMin, int holdThresholdMin, int trials){
@@ -39,8 +44,8 @@ public class Main {
         int ticksToRunFor = 54000;
 
         ArrayList<Integer> schedule = new ArrayList<>(Arrays.asList(0, 600, 1200, 1800, 2400, 3000));
-        int numStartingBuses = 10;
-        double distancePerTick = 8.94; // 20mph (8.94)
+        int numStartingBuses = 7;
+        double distancePerTick = 8.94; // 20mph (8.94m/s)
 
         int numStops = 60;
         double minStopDistance = 152.4; // 500ft
@@ -67,7 +72,7 @@ public class Main {
             System.out.println(Math.round(i*100/trials) + "% complete");
             DefaultScheduleTerminal terminal = new DefaultScheduleTerminal(schedule, numStartingBuses, distancePerTick);
             Simulation simulation = new Simulation((long)i, ticksToRunFor, terminal, holdController, defaultExpressController, numStops, minStopDistance, maxStopDistance, minPassengerGenPerTick, maxPassengerGenPerTick);
-            System.out.println("----------NEW SIMULATION----------");
+            //System.out.println("----------NEW SIMULATION----------");
             simulation.run();
 
             // data parsing
@@ -80,6 +85,7 @@ public class Main {
             totalPassengerTravelTime += simulation.getPassengerCollector().getAverageTravelTime();
             totalDistributionIntegral += simulation.getHeadwayStateCollector().distributionIntegral();
             totalAverageHeadway += simulation.getHeadwayStateCollector().getAverageHeadway();
+            //System.out.println(terminal.getNumDispatchedBuses());
         }
 
         for(int i = 0; i < 30; i++){

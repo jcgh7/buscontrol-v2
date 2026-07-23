@@ -52,7 +52,7 @@ public class HeadwayState {
                 }
             }
             if ((int) Math.round(headwayTicks / 60) == 0 || (int) Math.round(headwayTicks / 60) == 1) {
-                headways.add(route.routeRNG.nextInt(4 * 60));
+                headways.add(route.routeRNG.nextInt(6 * 60));
             } else {
                 headways.add((int) Math.round(headwayTicks));
             }
